@@ -6,20 +6,19 @@ import sun.reflect.generics.tree.Tree;
  * @Author roger sun
  * @Date 2019/11/7 16:39
  */
-public class AvlTreeNode<T> extends TreeNode {
+public class AvlTreeNode<T> extends TreeNode<T> {
 
     private AvlTreeNode left;
     private AvlTreeNode right;
     private T val;
 
+    private int height;
+
     public AvlTreeNode(AvlTreeNode left, AvlTreeNode right, T val) {
         this.left = left;
         this.right = right;
         this.val = val;
-    }
-
-    public AvlTreeNode(T val) {
-        this.val = val;
+        this.height = 1;
     }
 
     public AvlTreeNode getLeft() {
@@ -44,5 +43,13 @@ public class AvlTreeNode<T> extends TreeNode {
 
     public void setVal(T val) {
         this.val = val;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

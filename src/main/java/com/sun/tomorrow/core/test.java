@@ -1,7 +1,6 @@
 package com.sun.tomorrow.core;
 
-import com.sun.tomorrow.core.container.TreeFactory;
-import sun.reflect.generics.tree.Tree;
+import com.sun.tomorrow.core.container.AvlTreeFactory;
 
 /**
  * @Author roger sun
@@ -9,11 +8,13 @@ import sun.reflect.generics.tree.Tree;
  */
 public class test {
 
-    TreeFactory tf = new TreeFactory() {
-        @Override
-        public void cmp(Object v1, Object v2) {
-
+    public static void main(String[] args){
+        AvlTreeFactory avlTreeFactory = new AvlTreeFactory() {
+            @Override
+            public int cmp(Object v1, Object v2) {
+                return 0;
+            }
         }
-    };
+    }
 
 }
