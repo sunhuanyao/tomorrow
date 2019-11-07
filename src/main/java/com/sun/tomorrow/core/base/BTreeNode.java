@@ -8,25 +8,31 @@ import java.io.Serializable;
  */
 public class BTreeNode<T> extends TreeNode {
 
-    private transient int DefaultOrderNumber = 5;
+    private static int DefaultOrderNumber = 5;
 
     private BTreeNode[] childs;
 
     private Object[] vals;
 
-    public BTreeNode(BTreeNode[] childs, T[] vals) {
-        this.childs = childs;
-        this.vals = vals;
-    }
+    private int nowValIndex;
+    private int nowChildIndex;
+
 
     public BTreeNode() {
-        this.childs = new BTreeNode[DefaultOrderNumber];
-        this.vals = new Object[DefaultOrderNumber];
+        this(DefaultOrderNumber);
     }
 
     public BTreeNode(int cap) {
         this.childs = new BTreeNode[cap];
         this.vals = new Object[cap];
+        this.nowValIndex = 0;
+        this.nowChildIndex = 0;
+    }
+
+
+    public void add(T val, BTreeNode node){
+        this.vals[nowValIndex ++] = val;
+        this.childs[nowChildIndex ++] = node;
     }
 
     public BTreeNode[] getChilds() {

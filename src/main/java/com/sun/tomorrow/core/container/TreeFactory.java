@@ -6,6 +6,6 @@ package com.sun.tomorrow.core.container;
  */
 public abstract class TreeFactory {
 
-    public abstract void cmp(Object v1, Object v2);
+    public abstract int cmp(Object v1, Object v2);
 
 }
