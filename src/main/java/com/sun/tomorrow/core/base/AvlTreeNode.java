@@ -8,32 +8,36 @@ import sun.reflect.generics.tree.Tree;
  */
 public class AvlTreeNode<T> extends TreeNode<T> {
 
-    private AvlTreeNode left;
-    private AvlTreeNode right;
+    private AvlTreeNode<T> left;
+    private AvlTreeNode<T> right;
     private T val;
 
     private int height;
 
-    public AvlTreeNode(AvlTreeNode left, AvlTreeNode right, T val) {
+    public AvlTreeNode(AvlTreeNode<T> left, AvlTreeNode<T> right, T val) {
         this.left = left;
         this.right = right;
         this.val = val;
         this.height = 1;
     }
 
-    public AvlTreeNode getLeft() {
+    public AvlTreeNode(T val) {
+        this(null,null, val);
+    }
+
+    public AvlTreeNode<T> getLeft() {
         return left;
     }
 
-    public void setLeft(AvlTreeNode left) {
+    public void setLeft(AvlTreeNode<T> left) {
         this.left = left;
     }
 
-    public AvlTreeNode getRight() {
+    public AvlTreeNode<T> getRight() {
         return right;
     }
 
-    public void setRight(AvlTreeNode right) {
+    public void setRight(AvlTreeNode<T> right) {
         this.right = right;
     }
 
