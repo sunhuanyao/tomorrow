@@ -23,8 +23,8 @@ public class test {
         avlTreeFactory.add(4);
         avlTreeFactory.add(5);
         avlTreeFactory.add(6);
-        avlTreeFactory.add(7);
-        avlTreeFactory.delete(5);
+//        avlTreeFactory.add(7);
+//        avlTreeFactory.delete(5);
 
 //        avlTreeFactory.print();
         System.out.println(avlTreeFactory.toString());

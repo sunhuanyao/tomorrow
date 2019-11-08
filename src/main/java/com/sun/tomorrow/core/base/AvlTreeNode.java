@@ -8,11 +8,11 @@ import sun.reflect.generics.tree.Tree;
  */
 public class AvlTreeNode<T> extends TreeNode<T> {
 
+    private T val;
+    private int height;
     private AvlTreeNode<T> left;
     private AvlTreeNode<T> right;
-    private T val;
 
-    private int height;
 
     public AvlTreeNode(AvlTreeNode<T> left, AvlTreeNode<T> right, T val) {
 
