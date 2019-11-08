@@ -2,6 +2,7 @@ package com.sun.tomorrow.core.container;
 
 import com.google.gson.Gson;
 import com.sun.tomorrow.core.base.AvlTreeNode;
+import sun.java2d.loops.GraphicsPrimitiveProxy;
 import sun.util.locale.provider.AvailableLanguageTags;
 
 import javax.swing.*;
@@ -49,7 +50,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
             root.setLeft(findPosition(root.getLeft(), val));
         }
         root = keepBanlance(root);
-        root.setHeight(maintainHeight(root) + 1);
+        root.setHeight(maintainHeight(root));
         return root;
     }
 
@@ -66,7 +67,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         }else{
             findAndDelete(avlTreeNode.getLeft(), key, avlTreeNode, 1);
         }
-        avlTreeNode.setHeight(maintainHeight(avlTreeNode) + 1);
+        avlTreeNode.setHeight(maintainHeight(avlTreeNode));
     }
 
     private void findAndDelete(AvlTreeNode<T> root, T val, AvlTreeNode<T> prefix, int type){
@@ -118,14 +119,14 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         }else{
             findAndDelete(root.getLeft(), val, root, 1);
         }
-        root.setHeight(maintainHeight(root) + 1);
+        root.setHeight(maintainHeight(root));
     }
     //维护 树高
     private int maintainHeight(AvlTreeNode<T> root){
         int left = root.getLeft() == null? 0: root.getLeft().getHeight();
         int right = root.getRight() == null? 0: root.getRight().getHeight();
 
-        return Math.max(left, right);
+        return Math.max(left, right) + 1;
     }
 
     //比较两个子节点的高度差
@@ -144,72 +145,74 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         if(dis >= 2){
             // 左子树 height > 右子树 height  翻转左子树
             // LL 或 LR
-            return LLORLR(root.getLeft(), root, 1);
+            int disLeft = getDisBetweenTwoNode(root.getLeft());
+            if(disLeft > 0){
+                //LL
+                return LL(root);
+            }else{
+                root = LR(root);
+                return LL(root);
+            }
         }else{
-            return RRORRL(root.getRight(), root, 2);
-        }
-    }
-
-    /**
-     *
-     * @param root 当前节点
-     * @param prefix 前置 节点
-     * @param type  前置节点和当前节点的关系  左子树：1  右子树： 2
-     */
-    private AvlTreeNode<T> LLORLR(AvlTreeNode<T> root, AvlTreeNode<T> prefix, int type){
-        if(root.getRight() == null){
-            if(type == 1) {  //LL型 --
-                prefix.setLeft(null);
-                prefix.setHeight(1);
-                root.setRight(prefix);
-                root.setHeight(2);
-                return root;
-            }else{ // LR型  先 转化成LL型 - 再
-                prefix.setRight(null);
-                prefix.setHeight(1);
-                root.setLeft(prefix);
-                root.setHeight(2);
-                return root;
+            int disRight = getDisBetweenTwoNode(root.getRight());
+            if(disRight > 0){
+                //LL
+                root = RL(root);
+                return RR(root);
+            }else{
+                return RR(root);
             }
         }
-        AvlTreeNode<T> now = LLORLR(root.getRight(), root, 2);
-
-        if(isOk(now)){
-            return now;
-        }
-        return LLORLR(now, prefix, type);
-
-
-
     }
+
     private boolean isOk(AvlTreeNode<T> root){
         int dis = getDisBetweenTwoNode(root);
         return dis < 2 && dis > -2;
     }
 
-    private AvlTreeNode<T> RRORRL(AvlTreeNode<T> root, AvlTreeNode<T> prefix, int type){
-        if(root.getLeft() == null){
-            if(type == 2){
-                prefix.setRight(null);
-                prefix.setHeight(1);
-                root.setLeft(prefix);
-                root.setHeight(2);
-                return root;
-            }else{
-                prefix.setLeft(null);
-                prefix.setHeight(1);
-                root.setRight(prefix);
-                root.setHeight(2);
-                return root;
-            }
-        }
+    private AvlTreeNode<T> RR(AvlTreeNode<T> root){
+        AvlTreeNode<T> right = root.getRight();
+        root.setRight(right.getLeft());
+        root.setHeight(maintainHeight(root));
+        right.setLeft(root);
+        right.setHeight(maintainHeight(right));
 
-        AvlTreeNode<T> now = RRORRL(root.getLeft(), root, 1);
-        if(isOk(now)){
-            return now;
-        }
-        return RRORRL(now, prefix, type);
+        return right;
+    }
 
+    private AvlTreeNode<T> LL(AvlTreeNode<T> root){
+        AvlTreeNode<T> left = root.getLeft();
+        root.setLeft(left.getRight());
+        root.setHeight(maintainHeight(root));
+        left.setRight(root);
+        left.setHeight(maintainHeight(left));
+        return left;
+    }
+
+    private AvlTreeNode<T> RL(AvlTreeNode<T> root){
+        AvlTreeNode<T> right = root.getRight();
+        AvlTreeNode<T> rightLeft = root.getRight().getLeft();
+        root.setRight(right.getLeft());
+        right.setLeft(rightLeft.getRight());
+        rightLeft.setRight(right);
+        right.setHeight(maintainHeight(right));
+        rightLeft.setHeight(maintainHeight(rightLeft));
+        root.setHeight(maintainHeight(root));
+        return root;
+    }
+
+    private AvlTreeNode<T> LR(AvlTreeNode<T> root){
+        AvlTreeNode<T> left = root.getLeft();
+        AvlTreeNode<T> leftRight = root.getLeft().getRight();
+        root.setLeft(left.getRight());
+
+        left.setRight(leftRight.getLeft());
+        leftRight.setLeft(left);
+
+        left.setHeight(maintainHeight(left));
+        leftRight.setHeight(maintainHeight(leftRight));
+        root.setHeight(maintainHeight(root));
+        return root;
     }
 
 
@@ -226,7 +229,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
             return root;
         }
         AvlTreeNode<T> res = getRightTreeNodes(root.getRight(), root);
-        res.setHeight(maintainHeight(res) + 1);
+        res.setHeight(maintainHeight(res));
         return res;
     }
 
@@ -244,7 +247,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
             return root;
         }
         AvlTreeNode<T> res = getLeftTreeNodes(root.getLeft(), root);
-        res.setHeight(maintainHeight(res) + 1);
+        res.setHeight(maintainHeight(res));
         return res;
     }
 
