@@ -1,5 +1,6 @@
 package com.sun.tomorrow.core;
 
+import com.sun.tomorrow.core.base.AvlTreeNode;
 import com.sun.tomorrow.core.container.AvlTreeFactory;
 
 /**
@@ -9,12 +10,26 @@ import com.sun.tomorrow.core.container.AvlTreeFactory;
 public class test {
 
     public static void main(String[] args){
-        AvlTreeFactory avlTreeFactory = new AvlTreeFactory() {
+        AvlTreeFactory<Integer> avlTreeFactory = new AvlTreeFactory<Integer>() {
             @Override
-            public int cmp(Object v1, Object v2) {
-                return 0;
+            public int cmp(Integer v1, Integer v2) {
+                return v1 - v2;
             }
-        }
+        };
+
+        avlTreeFactory.add(1);
+        avlTreeFactory.add(2);
+        avlTreeFactory.add(3);
+        avlTreeFactory.add(4);
+        avlTreeFactory.add(5);
+        avlTreeFactory.add(6);
+        avlTreeFactory.add(7);
+        avlTreeFactory.delete(5);
+
+//        avlTreeFactory.print();
+        System.out.println(avlTreeFactory.toString());
+
+
     }
 
 }

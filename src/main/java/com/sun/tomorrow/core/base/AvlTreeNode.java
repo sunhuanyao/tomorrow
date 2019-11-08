@@ -15,6 +15,7 @@ public class AvlTreeNode<T> extends TreeNode<T> {
     private int height;
 
     public AvlTreeNode(AvlTreeNode<T> left, AvlTreeNode<T> right, T val) {
+
         this.left = left;
         this.right = right;
         this.val = val;
