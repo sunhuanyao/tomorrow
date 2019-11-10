@@ -199,6 +199,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
     }
 
     private void addLeft(AvlTreeNode<T> root, AvlTreeNode<T> tmp){
+        if(root == null) return ;
         if(root.getLeft() == null){
             root.setLeft(tmp);
             root.setHeight(maintainHeight(root));
@@ -208,6 +209,8 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         root.setHeight(maintainHeight(root));
     }
     private void addRight(AvlTreeNode<T> root, AvlTreeNode<T> tmp){
+
+        if(root == null) return ;
         if(root.getRight() == null){
             root.setRight(tmp);
             root.setHeight(maintainHeight(root));
