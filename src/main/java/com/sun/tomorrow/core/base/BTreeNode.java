@@ -1,5 +1,7 @@
 package com.sun.tomorrow.core.base;
 
+import com.sun.tomorrow.core.util.exception.TooLargeException;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +11,8 @@ import java.io.Serializable;
 public class BTreeNode<T> extends TreeNode {
 
     private static int DefaultOrderNumber = 5;
+
+    public static int MAXENTRYARRAYS = 100;
 
     private BTreeNode[] childs;
 
@@ -23,6 +27,7 @@ public class BTreeNode<T> extends TreeNode {
     }
 
     public BTreeNode(int cap) {
+        if(cap > MAXENTRYARRAYS) throw new TooLargeException();
         this.childs = new BTreeNode[cap];
         this.vals = new Object[cap];
         this.nowValIndex = 0;
@@ -43,9 +48,9 @@ public class BTreeNode<T> extends TreeNode {
         this.childs = childs;
     }
 
-    public T[] getVals() {
+    public Object[] getVals() {
 
-        return (T[])vals;
+        return vals;
     }
 
     public void setVals(Object[] vals) {
