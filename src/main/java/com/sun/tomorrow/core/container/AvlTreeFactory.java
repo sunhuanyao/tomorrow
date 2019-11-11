@@ -84,18 +84,15 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
 //                System.out.println("LL");
                 return LL(root);
             }else{
-//                System.out.println("LR and LL");
-                root = LR(root);
-
-                return LL(root);
+//                System.out.println("LR and LL")
+                return LL(LR(root));
             }
         }else{
             int disRight = getDisBetweenTwoNode(root.getRight());
             if(disRight > 0){
                 //LL
 //                System.out.println("RL and RR");
-                root = RL(root);
-                return RR(root);
+                return RR(RL(root));
             }else{
 //                System.out.println("RR");
                 return RR(root);
