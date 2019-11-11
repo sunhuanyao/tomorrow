@@ -24,7 +24,7 @@ public class test {
         avlTreeFactory.add(3);
         avlTreeFactory.add(6);
         avlTreeFactory.add(4);
-        avlTreeFactory.delete(7);
+        avlTreeFactory.delete(5);
 
 //        avlTreeFactory.print();
         System.out.println(avlTreeFactory.toString());

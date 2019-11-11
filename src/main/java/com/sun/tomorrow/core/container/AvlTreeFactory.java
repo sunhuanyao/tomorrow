@@ -68,7 +68,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         int right = root.getRight() == null? 0: root.getRight().getHeight();
         return left - right;
     }
-
+    //维护当前节点的平衡
     private AvlTreeNode<T> keepBanlance(AvlTreeNode<T> root){
 
         int dis = getDisBetweenTwoNode(root);
@@ -81,28 +81,35 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
             int disLeft = getDisBetweenTwoNode(root.getLeft());
             if(disLeft > 0){
                 //LL
+//                System.out.println("LL");
                 return LL(root);
             }else{
+//                System.out.println("LR and LL");
                 root = LR(root);
+
                 return LL(root);
             }
         }else{
             int disRight = getDisBetweenTwoNode(root.getRight());
             if(disRight > 0){
                 //LL
+//                System.out.println("RL and RR");
                 root = RL(root);
                 return RR(root);
             }else{
+//                System.out.println("RR");
                 return RR(root);
             }
         }
     }
 
+    @Deprecated
     private boolean isOk(AvlTreeNode<T> root){
         int dis = getDisBetweenTwoNode(root);
         return dis < 2 && dis > -2;
     }
 
+    //平衡 RR 操作
     private AvlTreeNode<T> RR(AvlTreeNode<T> root){
         AvlTreeNode<T> right = root.getRight();
         root.setRight(right.getLeft());
@@ -113,6 +120,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         return right;
     }
 
+    //平衡LL 操作
     private AvlTreeNode<T> LL(AvlTreeNode<T> root){
         AvlTreeNode<T> left = root.getLeft();
         root.setLeft(left.getRight());
@@ -121,7 +129,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         left.setHeight(maintainHeight(left));
         return left;
     }
-
+    //平衡RL 操作
     private AvlTreeNode<T> RL(AvlTreeNode<T> root){
         AvlTreeNode<T> right = root.getRight();
         AvlTreeNode<T> rightLeft = root.getRight().getLeft();
@@ -133,7 +141,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         root.setHeight(maintainHeight(root));
         return root;
     }
-
+    // 平衡 LR 操作
     private AvlTreeNode<T> LR(AvlTreeNode<T> root){
         AvlTreeNode<T> left = root.getLeft();
         AvlTreeNode<T> leftRight = root.getLeft().getRight();
@@ -147,57 +155,83 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         root.setHeight(maintainHeight(root));
         return root;
     }
-
+    //删除节点操作
     public void delete(T key){
+//        System.out.println("delete -----------------------------------");
         avlTreeNode = deleteByKey(avlTreeNode, key);
 
+        //  维护下树根
+        avlTreeNode = keepBanlance(avlTreeNode);
     }
 
+    //删除节点
     public AvlTreeNode<T> deleteByKey(AvlTreeNode<T> root, T key){
+        int dis = getDisBetweenTwoNode(root);
         if(cmp(root.getVal(), key) == 0){
-            int dis = getDisBetweenTwoNode(root);
+
             AvlTreeNode<T> right = root.getRight();
             AvlTreeNode<T> left = root.getLeft();
             if(dis > 0){
-                // 左子树 顶替
+                // 左子树顶替后，其右子树需要加入到其右兄弟节点的左子树
                 addLeft(right, left.getRight());
-                left.setRight(right);
+//                left.setRight(balanced(right));
+                left.setRight(balanced(right, 1));
                 left.setHeight(maintainHeight(left));
+//                res = left;
+                // 顶替完后需要检查平衡并维护平衡 -- 左子树顶替  只需维护 右兄弟节点的左子树
+
                 return left;
             }else{
+                //右子树 顶替
                 addRight(left, right.getLeft());
-                right.setLeft(left);
+//                顶替完后需要检查平衡并维护平衡 --
+                right.setLeft(balanced(left, 2));
                 right.setHeight(maintainHeight(right));
+//                res = right;
+//                return balanced(right,2);
                 return right;
             }
+
         }
         if(cmp(root.getVal(), key) > 0){
             root.setLeft(deleteByKey(root.getLeft(), key));
-            root.setRight(balanced(root.getRight()));
         }else{
+
             root.setRight(deleteByKey(root.getRight(), key));
-            root.setLeft(balanced(root.getLeft()));
         }
-        return root;
-    }
-
-    private AvlTreeNode<T> balanced(AvlTreeNode<T> root){
-
-        int dis = getDisBetweenTwoNode(root);
-        if(dis == 0){
-            root.setHeight(maintainHeight(root));
-            return root;
-        }
-        if(dis > 0){
-            root.setLeft( balanced(root.getLeft()));
-        }else{
-            root.setRight( balanced(root.getRight()));
-        }
-        root = keepBanlance(root);
+        // 回溯过程中 需要检查 是否满足 平衡 - 只需进行当前节点平衡
+        if(dis >= 2 || dis <= -2)
+            root = keepBanlance(root);
         root.setHeight(maintainHeight(root));
         return root;
     }
 
+    /**
+     * 该节点子树的平衡维护 ：
+     *    贪心算法：通过选择最大高度的子树进行遍历因为在删除的时候,通过高度的较大值选择顶替节点，如果选择左子树为顶替节点，顶替后，其左子树的左子树必然是平衡，左子树的右子树会加入要另一兄弟分支，完成顶替；
+     * @param root
+     * @return
+     */
+    private AvlTreeNode<T> balanced(AvlTreeNode<T> root, int type){
+
+        int dis = getDisBetweenTwoNode(root);
+        //叶子节点判断
+        if(dis < 2 && (root.getLeft() == null || root.getRight() == null)){
+            root.setHeight(maintainHeight(root));
+            return root;
+        }
+        if(type == 1){
+            root.setLeft( balanced(root.getLeft(), 1));
+        }else{
+            root.setRight( balanced(root.getRight(), 2));
+        }
+        //剪枝 - 避免无用操作
+        if(dis >= 2 || dis <= -2)
+            root = keepBanlance(root);
+        root.setHeight(maintainHeight(root));
+        return root;
+    }
+    //  在 root 上  加入 左子树
     private void addLeft(AvlTreeNode<T> root, AvlTreeNode<T> tmp){
         if(root == null) return ;
         if(root.getLeft() == null){
@@ -208,6 +242,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         addLeft(root.getLeft(), tmp);
         root.setHeight(maintainHeight(root));
     }
+    // 在root 上  加入  右子树
     private void addRight(AvlTreeNode<T> root, AvlTreeNode<T> tmp){
 
         if(root == null) return ;
