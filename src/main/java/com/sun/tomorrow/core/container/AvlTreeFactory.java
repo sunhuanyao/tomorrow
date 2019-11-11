@@ -156,6 +156,16 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         return root;
     }
     //删除节点操作
+
+    /**
+     *  删除操作描述：
+     *     1.找到对应节点，然后选择最大高度子树节点顶替；
+     *     2.顶替后，维护另一个兄弟节点的平衡:
+     *          1). 若左子树节点代替： 则维护右子树的左子树
+     *          2). 同理相反
+     *     3.向上回溯维护树的平衡；
+     * @param key
+     */
     public void delete(T key){
 //        System.out.println("delete -----------------------------------");
         avlTreeNode = deleteByKey(avlTreeNode, key);
@@ -164,7 +174,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
         avlTreeNode = keepBanlance(avlTreeNode);
     }
 
-    //删除节点
+    //
     public AvlTreeNode<T> deleteByKey(AvlTreeNode<T> root, T key){
         int dis = getDisBetweenTwoNode(root);
         if(cmp(root.getVal(), key) == 0){
@@ -208,7 +218,7 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
 
     /**
      * 该节点子树的平衡维护 ：
-     *    贪心算法：通过选择最大高度的子树进行遍历因为在删除的时候,通过高度的较大值选择顶替节点，如果选择左子树为顶替节点，顶替后，其左子树的左子树必然是平衡，左子树的右子树会加入要另一兄弟分支，完成顶替；
+     *
      * @param root
      * @return
      */
