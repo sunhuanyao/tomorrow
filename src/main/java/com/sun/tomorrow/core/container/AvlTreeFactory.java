@@ -184,21 +184,20 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
             if(dis > 0){
                 // 左子树顶替后，其右子树需要加入到其右兄弟节点的左子树
                 addLeft(right, left.getRight());
-//                left.setRight(balanced(right));
                 left.setRight(balanced(right, 1));
                 left.setHeight(maintainHeight(left));
-//                res = left;
                 // 顶替完后需要检查平衡并维护平衡 -- 左子树顶替  只需维护 右兄弟节点的左子树
 
                 return left;
             }else{
                 //右子树 顶替
+                if(right == null){
+                    return null;
+                }
                 addRight(left, right.getLeft());
 //                顶替完后需要检查平衡并维护平衡 --
                 right.setLeft(balanced(left, 2));
                 right.setHeight(maintainHeight(right));
-//                res = right;
-//                return balanced(right,2);
                 return right;
             }
 
@@ -209,9 +208,10 @@ public abstract class AvlTreeFactory<T> extends TreeFactory<T> implements TreeFa
 
             root.setRight(deleteByKey(root.getRight(), key));
         }
+
         // 回溯过程中 需要检查 是否满足 平衡 - 只需进行当前节点平衡
-        if(dis >= 2 || dis <= -2)
-            root = keepBanlance(root);
+
+        root = keepBanlance(root);
         root.setHeight(maintainHeight(root));
         return root;
     }
