@@ -5,19 +5,22 @@ a local cache for indexes named tomorrow；
 
 avl树的用法示例
 ```$xslt
-        AvlTreeFactory<Integer> avlTreeFactory = new AvlTreeFactory<Integer>() {
-            @Override
-            public int cmp(Integer v1, Integer v2) {
-                return v1 - v2;
-            }
-        };
+public class test {
+   public static List<Integer> t1 = Arrays.asList(5, 2, 8, 3, 1, 7, 9, 4, 6);
+   public static void main(String[] args){
+       AvlTreeFactory<Integer> avlTreeFactory = new AvlTreeFactory<Integer>() {
+           @Override
+           public int cmp(Integer v1, Integer v2) {
+               return v1 - v2;
+           }
+       };
+       for(int i = 0 ; i < t1.size(); ++ i){
 
-        for(int i = 0 ; i < t1.size(); ++ i){
+           avlTreeFactory.add(t1.get(i));
 
-            avlTreeFactory.add(t1.get(i));
-
-        }
-
-        avlTreeFactory.delete(1);
-        System.out.println(avlTreeFactory.toString());
+       }
+       avlTreeFactory.delete(1);
+       System.out.println(avlTreeFactory.toString());
+   }
+}
 ```
