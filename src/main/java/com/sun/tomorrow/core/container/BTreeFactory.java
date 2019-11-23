@@ -115,7 +115,7 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
 
 
     public BTreeNode<T> splitNode(BTreeNode<T> root){
-        BTreeNode<T> newRoot = new BTreeNode<>(cap);
+
         Object[] left = new Object[cap];
         Object[] right = new Object[cap];
         System.arraycopy( root.getVals(),
@@ -150,8 +150,25 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
                 root.getRightSplitChildsNodeLength()
 
         );
-
-        return null;
+        return new BTreeNode<>(
+                root.getMidValArray(),
+                1,
+                root.getLevel() + 1,
+                root.generateNewChildsNode(
+                        new BTreeNode<>(
+                                left,
+                                root.getLeftSplitNodeLength(),
+                                root.getLevel(),
+                                leftChild
+                        ),
+                        new BTreeNode(
+                                right,
+                                root.getRightSplitNodeLength(),
+                                root.getLevel(),
+                                rightChild
+                        )
+                )
+        );
 
     }
 

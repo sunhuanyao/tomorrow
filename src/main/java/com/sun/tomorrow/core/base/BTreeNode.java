@@ -161,4 +161,21 @@ public class BTreeNode<T> extends TreeNode {
         return getRightSplitNodeLength() + 1;
     }
 
+    public Object[] getMidValArray(){
+        Object[] mid = new Object[vals.length];
+        mid[0] = vals[getLeftSplitNodeLength()];
+        return mid;
+    }
+
+    public int length(){
+        return vals.length;
+    }
+
+    public BTreeNode[] generateNewChildsNode(BTreeNode left,BTreeNode right){
+        BTreeNode[] childs = new BTreeNode[length()];
+        childs[0] = left;
+        childs[1] = right;
+        return childs;
+    }
+
 }
