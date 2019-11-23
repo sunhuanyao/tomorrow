@@ -112,16 +112,7 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
         root.valIndexIncrease();
         return root;
     }
-    // 获取  分裂后，左节点的长度
-    private int getLeftSplitNodeLength(int tmp){
-        return (tmp + 1) / 2;
-    }
 
-
-    //获取 分裂后， 右节点的起始位置
-    private int getRightStartIndex(int tmp){
-        return getLeftSplitNodeLength(tmp) + 1;
-    }
 
     public BTreeNode<T> splitNode(BTreeNode<T> root){
         BTreeNode<T> newRoot = new BTreeNode<>(cap);
@@ -131,14 +122,14 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
                 0,
                 left,
                 0,
-                getLeftSplitNodeLength(root.getNowValIndex())
+                root.getLeftSplitNodeLength()
         );
 
         System.arraycopy( root.getVals(),
-                getRightStartIndex(root.getNowValIndex()),
+                root.getRightStartIndex(),
                 right,
                 0,
-                root.getNowValIndex() - getLeftSplitNodeLength(root.getNowValIndex())
+                root.getRightSplitNodeLength()
         );
         BTreeNode[] leftChild = new BTreeNode[cap + 1];
         BTreeNode[] rightChild = new BTreeNode[cap + 1];
@@ -148,10 +139,19 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
                 0,
                 leftChild,
                 0,
-                getLeftSplitNodeLength(root.getNowValIndex()) + 1
+                root.getLeftSplitChildsNodeLength()
         );
 
+        System.arraycopy(
+                root.getChilds(),
+                root.getRightStartChildsIndex(),
+                rightChild,
+                0,
+                root.getRightSplitChildsNodeLength()
 
+        );
+
+        return null;
 
     }
 
@@ -175,7 +175,7 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
             return root;
         }
 
-
+        return null;
 
     }
 
