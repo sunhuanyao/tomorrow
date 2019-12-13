@@ -70,6 +70,9 @@ public class BTreeNode<T> extends TreeNode {
     public void valIndexIncrease(){
         this.nowValIndex ++;
     }
+    public void valIndexIncrease(int num){
+        this.nowValIndex += num;
+    }
 
     public int getLevel() {
         return level;
