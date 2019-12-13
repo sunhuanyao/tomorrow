@@ -5,6 +5,7 @@ import com.sun.tomorrow.core.util.SafeGson;
 import com.sun.tomorrow.core.util.TreeNodeTools;
 import com.sun.tomorrow.core.util.exception.EmptyArrayException;
 import com.sun.tomorrow.core.util.exception.InitialClassException;
+import com.sun.tomorrow.core.util.exception.RepeatingFieldException;
 import com.sun.tomorrow.core.util.exception.TooLargeException;
 
 /**
@@ -46,7 +47,7 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
         if(bTreeNode == null){
             throw new InitialClassException();
         }
-        findPosition(this.bTreeNode, key);
+        this.bTreeNode = findPosition(this.bTreeNode, key);
     }
 
 
@@ -69,20 +70,20 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
     public int midFind(Object[] orgin, int valIndex, T key){
         int l = 0;
         int r = valIndex - 1;
-        while(l < r){
+        while(l <= r){
             int m = ( l + r ) >> 1;
-            int dis = cmp((T)orgin[m], key);
+            int dis = cmp((T)orgin[m], key);   //  orgin[m] - key
             if(dis == 0){
-                return m;
+                throw new RepeatingFieldException();
             }
-            if(dis > 0){
-                r = m;
+            if(dis > 0){   // orgin[m] > key
+                r = m - 1;
             }else{
                 l = m + 1;
             }
 
         }
-        return r;
+        return l;
     }
 
     /**
