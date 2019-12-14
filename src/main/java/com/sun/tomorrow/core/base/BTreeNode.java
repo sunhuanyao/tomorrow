@@ -175,7 +175,7 @@ public class BTreeNode<T> extends TreeNode {
     }
 
     public BTreeNode[] generateNewChildsNode(BTreeNode left,BTreeNode right){
-        BTreeNode[] childs = new BTreeNode[length()];
+        BTreeNode[] childs = new BTreeNode[length() + 1];
         childs[0] = left;
         childs[1] = right;
         return childs;

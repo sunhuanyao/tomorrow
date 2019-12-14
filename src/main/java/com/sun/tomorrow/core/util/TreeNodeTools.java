@@ -59,8 +59,18 @@ public class TreeNodeTools {
 
     }
 
+    /**
+     * 数组和数组进行合并 --- 用于 child 值的操作   和 insertIntoArray 的主要差别在与childs 的合并会有覆盖的情况。
+     * @param origin
+     * @param tmp
+     * @param index
+     * @param originSize
+     * @param tmpSize
+     * @param cap
+     * @return
+     */
     public static BTreeNode[] coverAndAdd(BTreeNode[] origin, BTreeNode[] tmp, int index, int originSize, int tmpSize, int cap){
-        if(origin.length > cap || originSize + tmpSize - 1 > cap) throw new ArrayIndexOutOfBoundsException("beyond the cap: " + cap);
+        if(origin.length > (cap + 1) || originSize + tmpSize - 1 > cap + 1) throw new ArrayIndexOutOfBoundsException("beyond the cap: " + cap);
 
 
         for(int i = origin.length - 1; i > index + tmpSize - 1; i -- ){

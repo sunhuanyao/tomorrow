@@ -38,7 +38,7 @@ public class test {
         BTreeFactory<Integer> bTreeFactory = new BTreeFactory<Integer>(3) {
             @Override
             public int cmp(Integer v1, Integer v2) {
-                return v2 - v1;
+                return v1 - v2;
             }
         };
         Integer[] a = {1, 3, 5, 7, 9, 11, 13, 15, 17};

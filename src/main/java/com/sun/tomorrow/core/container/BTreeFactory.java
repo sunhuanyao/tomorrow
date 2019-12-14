@@ -171,6 +171,7 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
         return btNode;
     }
 
+    @SuppressWarnings("unchecked")
     public BTreeNode<T> findPosition(BTreeNode<T> root, T key){
 //        if ()
         //遍历到叶子节点
@@ -186,13 +187,21 @@ public abstract class BTreeFactory<T> extends TreeFactory<T> implements TreeFact
         BTreeNode[] childs = root.getChilds();
 
         BTreeNode<T> tmp = findPosition(childs[index], key);
-        tmp = merge(root, tmp);
-        if(tmp.getNowValIndex() >= cap){
-            return splitNode(tmp);
+        if(root.getLevel() == tmp.getLevel()) {
+            root = merge(root, tmp);
         }
-        return tmp;
+        if(root.getNowValIndex() >= cap){
+            return splitNode(root);
+        }
+        return root;
     }
 
+    /**
+     * 合并两个节点 -- 分裂后的操作
+     * @param tmp1
+     * @param tmp2
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public BTreeNode<T> merge(BTreeNode<T> tmp1, BTreeNode<T> tmp2){
 
