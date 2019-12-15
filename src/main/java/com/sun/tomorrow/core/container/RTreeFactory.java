@@ -471,13 +471,11 @@ public class RTreeFactory {
 
         RTreeNode n = getRTreeNode(rootRTreeNodeId);
         RTreeNode tmp = null;
-//    RTreeNode new_tp = null;
 
         List<RTreeNode> result = new ArrayList<RTreeNode>();
 
-        Queue<RTreeNode> queue = new ArrayBlockingQueue<RTreeNode>(DEFAULT_MAX_RTreeNode_ENTRIES * 100 );
-
-        queue.add(n);
+        LinkedList<RTreeNode> queue = new LinkedList<>();
+        queue.addLast(n);
 
         while(true){
 
@@ -500,7 +498,7 @@ public class RTreeFactory {
                 double tempMaxX = tmp.entriesMaxX[i];
                 double tempMaxY = tmp.entriesMaxY[i];
                 if(containsPoint(tempMaxX, tempMaxY, tempMinX, tempMinY, p)){
-                    queue.add(getRTreeNode(tmp.ids[i]));
+                    queue.addLast(getRTreeNode(tmp.ids[i]));
                 }
             }
 
