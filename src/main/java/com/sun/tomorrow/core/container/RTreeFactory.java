@@ -22,9 +22,8 @@ public class RTreeFactory {
     private byte[] entryStatus = null;
     private byte[] initialEntryStatus = null;
 
-    private Stack<Integer> parents = new Stack<Integer>();
-    private Stack<Integer> parentsEntry = new Stack<Integer>();
-
+    private LinkedList<Integer> parents = new LinkedList<>();
+    private LinkedList<Integer> parentsEntry = new LinkedList<Integer>();
     private final static int DEFAULT_MAX_RTreeNode_ENTRIES = 5;
     private final static int DEFAULT_MIN_RTreeNode_ENTRIES = 0;
 
@@ -82,7 +81,7 @@ public class RTreeFactory {
         RTreeNode n = getRTreeNode(rootRTreeNodeId);
 
         parents.clear();
-        parents.clear();
+        parentsEntry.clear();
 
         while (true) {
             if (n.islevel(level)) {
