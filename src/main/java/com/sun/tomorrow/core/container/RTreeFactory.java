@@ -1,6 +1,5 @@
 package com.sun.tomorrow.core.container;
 
-import com.sun.tomorrow.core.base.Leaf;
 import com.sun.tomorrow.core.base.Point;
 import com.sun.tomorrow.core.base.RTreeNode;
 import com.sun.tomorrow.core.base.Rectangle;
@@ -12,7 +11,11 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @Author roger sun
  * @Date 2019/12/15 20:00
  */
-public class RTreeFactory {
+public class RTreeFactory<T extends Rectangle> {
+
+    /**
+     * 快速 查找点在  二维矩形群 中 的解决方案
+     */
 
     private Map<Integer, RTreeNode> RTreeNodeMap = new HashMap<>();
 
@@ -68,7 +71,7 @@ public class RTreeFactory {
         return rootRTreeNodeId;
     }
 
-    public void add(Rectangle r, int id) {
+    public void add(T r, int id) {
 
         add(r.minX, r.minY, r.maxX, r.maxY, id, 1);
 
@@ -511,17 +514,18 @@ public class RTreeFactory {
 //        }
         return result;
     }
-
-    public List<Leaf> queryLevel(Point p){
+     // --待解决方案 ----
+    @SuppressWarnings("unchecked")
+    public List<T> queryLevel(Point p){
 
         List<RTreeNode> result = queryRelation(p, 1);
 
-        List<Leaf> resLeaf = new ArrayList<Leaf>();
+        List<T> resLeaf = new ArrayList<>();
         for(RTreeNode rn: result){
             for(int i = 0; i < rn.entryCount; i++) {
                 if (containsPoint(rn.entriesMaxX[i], rn.entriesMaxY[i], rn.entriesMinX[i], rn.entriesMinY[i], p)) {
 //                    return new Leaf(rn.entriesMinX[i], rn.entriesMinY[i], rn.entriesMaxX[i], rn.entriesMaxY[i]);
-                    resLeaf.add(new Leaf(rn.entriesMinX[i], rn.entriesMinY[i], rn.entriesMaxX[i], rn.entriesMaxY[i]));
+                    resLeaf.add((T)new Rectangle(rn.entriesMinX[i], rn.entriesMinY[i], rn.entriesMaxX[i], rn.entriesMaxY[i]));
 
                 }
             }

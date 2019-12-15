@@ -1,8 +1,11 @@
 package com.sun.tomorrow.core;
 
 import com.sun.tomorrow.core.base.AvlTreeNode;
+import com.sun.tomorrow.core.base.Point;
+import com.sun.tomorrow.core.base.Rectangle;
 import com.sun.tomorrow.core.container.AvlTreeFactory;
 import com.sun.tomorrow.core.container.BTreeFactory;
+import com.sun.tomorrow.core.container.RTreeFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +18,20 @@ public class test {
 
     public static List<Integer> t1 = Arrays.asList(5, 2, 8,3,1,7,9, 4 , 6);
 
+    public class TestRect extends Rectangle {
+
+        public int val;
+
+        public TestRect(int minx, int miny, int maxx, int maxy, int val) {
+            super(minx, miny, maxx, maxy);
+            this.val = val;
+        }
+
+        @Override
+        public String toString() {
+            return val + "--";
+        }
+    }
 
     public static void main(String[] args){
 //        AvlTreeFactory<Integer> avlTreeFactory = new AvlTreeFactory<Integer>() {
@@ -35,18 +52,18 @@ public class test {
 ////        avlTreeFactory.print();
 //        System.out.println(avlTreeFactory.toString());
 
-        BTreeFactory<Integer> bTreeFactory = new BTreeFactory<Integer>(3) {
-            @Override
-            public int cmp(Integer v1, Integer v2) {
-                return v1 - v2;
-            }
-        };
-        Integer[] a = {1, 3, 5, 7, 9, 11, 13, 15, 17};
-
-        for(int i = 0 ; i < a.length; ++ i){
-            bTreeFactory.add(a[i]);
-        }
-        System.out.println(bTreeFactory);
+//        BTreeFactory<Integer> bTreeFactory = new BTreeFactory<Integer>(3) {
+//            @Override
+//            public int cmp(Integer v1, Integer v2) {
+//                return v1 - v2;
+//            }
+//        };
+//        Integer[] a = {1, 3, 5, 7, 9, 11, 13, 15, 17};
+//
+//        for(int i = 0 ; i < a.length; ++ i){
+//            bTreeFactory.add(a[i]);
+//        }
+//        System.out.println(bTreeFactory);
 
 //        int now = bTreeFactory.midFind(a, 16);
 //
@@ -54,6 +71,24 @@ public class test {
 //        System.out.println(now);
 //        Integer[] b = (Integer[])bTreeFactory.insertIntoArray(a, 2, now);
 //        System.out.println(b);
+
+        TestRect testRect = new test().new TestRect(1,2,3,4, 1);
+
+        TestRect testRect2 = new test().new TestRect(3,3,5,5, 2);
+        TestRect testRect3 = new test().new TestRect(11,2,12,4, 3);
+        TestRect testRect4 = new test().new TestRect(5,5,7,7, 4);
+
+        RTreeFactory<TestRect> rf = new RTreeFactory<>();
+        rf.init();
+        rf.add(testRect, 0);
+        rf.add(testRect2, 1);
+        rf.add(testRect3, 2);
+        rf.add(testRect4, 3);
+        System.out.println(rf.queryLevel(new Point(1, 3)));
+
+
     }
+
+
 
 }
