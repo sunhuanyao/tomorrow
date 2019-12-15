@@ -40,3 +40,7 @@ for(int i = 0 ; i < a.length; ++ i){
 }
 System.out.println(bTreeFactory);
 ```
+
+##R树空间索引的实现
+
+1.该R树主要针对二维空间的一个快速查找。
