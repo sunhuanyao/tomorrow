@@ -4,14 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.sun.tomorrow.core.util.SafeGson;
 import org.apache.http.HttpHost;
-import org.elasticsearch.client.Request;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestClientBuilder;
+import org.elasticsearch.client.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -54,14 +52,30 @@ public class RestClientFactory {
 
 
     public Object postData(String data) throws Exception{
+        return postBaseData(data, null);
+    }
+
+
+    public Object postDataWithHeader(String data, Map<String, String> headers) throws IOException {
+        RequestOptions.Builder builder = RequestOptions.DEFAULT.toBuilder();
+
+        Iterator<Map.Entry<String, String>> iter = headers.entrySet().iterator();
+        while(iter.hasNext()){
+            Map.Entry<String, String> map = iter.next();
+            builder.addHeader(map.getKey(), map.getValue());
+        }
+        return postBaseData(data, builder);
+    }
+
+    public Object postBaseData(String data, RequestOptions.Builder builder) throws IOException{
         Request r = new Request(
                 "POST",
                 url
         );
-
         r.setJsonEntity(data);
+        if(builder != null)
+            r.setOptions(builder);
         Response response = this.client.performRequest(r);
-
         InputStream in = response.getEntity().getContent();
         this.client.close();
         return readJsonStream(in);
