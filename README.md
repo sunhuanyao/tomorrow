@@ -45,3 +45,25 @@ System.out.println(bTreeFactory);
 
 1.该R树主要针对点在二维矩形群中的一个快速查找。
 
+##加入线程工具
+用法如下：
+```aidl
+
+public class test {
+    public void task1(){
+        System.out.println("1");
+    }
+    public void task2(){
+        System.out.println("2");
+    }
+    public void task3(){
+        System.out.println("3");
+    }
+    public static void main(String[] args){
+        ExecutorLocalService executorLocalService = new ExecutorLocalService(3);
+        
+        executorLocalService.doInvoke(test.class, "task");
+
+    }
+```
+

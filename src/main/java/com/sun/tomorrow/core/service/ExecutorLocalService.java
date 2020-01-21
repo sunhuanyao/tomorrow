@@ -26,6 +26,11 @@ public class ExecutorLocalService {
 
     }
 
+    /**
+     *  调用主入口
+     * @param clazz 调用的类
+     * @param args  调用的方法
+     */
     public void doInvoke(Class<?> clazz, String args){
         Method[] methods = clazz.getDeclaredMethods();
 
