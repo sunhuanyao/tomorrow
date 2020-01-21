@@ -26,7 +26,7 @@ public class test {
 ```
 
 B数的用法示例
-```aidl
+```$xslt
 BTreeFactory<Integer> bTreeFactory = new BTreeFactory<Integer>(3) {
     @Override
     public int cmp(Integer v1, Integer v2) {
@@ -41,13 +41,15 @@ for(int i = 0 ; i < a.length; ++ i){
 System.out.println(bTreeFactory);
 ```
 
-##R树空间索引的实现
+# R树空间索引的实现
 
 1.该R树主要针对点在二维矩形群中的一个快速查找。
 
-##加入线程工具
+# 加入线程工具
+
 用法如下：
-```aidl
+
+```$xslt
 
 public class test {
     public void task1(){
