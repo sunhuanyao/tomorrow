@@ -40,15 +40,13 @@ public class ExecutorLocalService {
         int i;
         for( i = 0 ; i < runnables.length; ++ i){
             final int op = i;
-            runnables[i] = new Runnable() {
-                public void run(){
-                    try {
+            runnables[i] = ()->{
+                try {
 //                        System.out.println("doInvoke!!!!");
-                        //invoke 调用 传参数必须是实例化变量
-                        methodList.get(op).invoke(clazz.newInstance());
-                    }catch (Exception e){
+                    //invoke 调用 传参数必须是实例化变量
+                    methodList.get(op).invoke(clazz.newInstance());
+                }catch (Exception e){
 
-                    }
                 }
             };
         }
