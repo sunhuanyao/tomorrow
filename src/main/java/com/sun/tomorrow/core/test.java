@@ -1,11 +1,7 @@
 package com.sun.tomorrow.core;
 
-import com.sun.tomorrow.core.base.AvlTreeNode;
-import com.sun.tomorrow.core.base.Point;
 import com.sun.tomorrow.core.base.Rectangle;
-import com.sun.tomorrow.core.container.AvlTreeFactory;
-import com.sun.tomorrow.core.container.BTreeFactory;
-import com.sun.tomorrow.core.container.RTreeFactory;
+import com.sun.tomorrow.core.service.ExecutorLocalService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +28,18 @@ public class test {
             return val + "--";
         }
     }
+
+
+    public void task1(){
+        System.out.println("1");
+    }
+    public void task2(){
+        System.out.println("2");
+    }
+    public void task3(){
+        System.out.println("3");
+    }
+
 
     public static void main(String[] args){
 //        AvlTreeFactory<Integer> avlTreeFactory = new AvlTreeFactory<Integer>() {
@@ -71,20 +79,25 @@ public class test {
 //        System.out.println(now);
 //        Integer[] b = (Integer[])bTreeFactory.insertIntoArray(a, 2, now);
 //        System.out.println(b);
+//
+//        TestRect testRect = new test().new TestRect(1,2,3,4, 1);
+//
+//        TestRect testRect2 = new test().new TestRect(3,3,5,5, 2);
+//        TestRect testRect3 = new test().new TestRect(11,2,12,4, 3);
+//        TestRect testRect4 = new test().new TestRect(5,5,7,7, 4);
+//
+//        RTreeFactory<TestRect> rf = new RTreeFactory<>();
+//        rf.init();
+//        rf.add(testRect, 0);
+//        rf.add(testRect2, 1);
+//        rf.add(testRect3, 2);
+//        rf.add(testRect4, 3);
+//        System.out.println(rf.queryLevel(new Point(1, 3)));
 
-        TestRect testRect = new test().new TestRect(1,2,3,4, 1);
 
-        TestRect testRect2 = new test().new TestRect(3,3,5,5, 2);
-        TestRect testRect3 = new test().new TestRect(11,2,12,4, 3);
-        TestRect testRect4 = new test().new TestRect(5,5,7,7, 4);
+        ExecutorLocalService executorLocalService = new ExecutorLocalService(3);
 
-        RTreeFactory<TestRect> rf = new RTreeFactory<>();
-        rf.init();
-        rf.add(testRect, 0);
-        rf.add(testRect2, 1);
-        rf.add(testRect3, 2);
-        rf.add(testRect4, 3);
-        System.out.println(rf.queryLevel(new Point(1, 3)));
+        executorLocalService.doInvoke(test.class, "task");
 
 
     }
