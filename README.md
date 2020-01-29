@@ -45,7 +45,7 @@ System.out.println(bTreeFactory);
 
 1.该R树主要针对点在二维矩形群中的一个快速查找。
 
-# 加入线程工具
+# 线程
 
 用法如下：
 
@@ -69,3 +69,32 @@ public class test {
     }
 ```
 
+#堆用法-定长堆
+
+```aidl
+public class Apple extends BaseEntity {
+    int val;
+    String name;
+    Apple(int val, String name){
+        this.val = val;
+        this.name = name;
+    }
+
+    public int compareTo(BaseEntity tmp){
+        return this.val - ((Apple)tmp).val;
+    }
+}
+
+Heap<Apple> heap = new Heap<>(9, true);
+heap.add(t.new Apple(1, "1"));
+heap.add(t.new Apple(2, "2"));
+heap.add(t.new Apple(4, "4"));
+heap.add(t.new Apple(6, "6"));
+heap.add(t.new Apple(7, "7"));
+heap.add(t.new Apple(8, "8"));
+heap.add(t.new Apple(3, "3"));
+heap.add(t.new Apple(5, "5"));
+System.out.println(heap.toString());
+System.out.println(heap.pop().val);
+System.out.println(heap.pop().val);
+```

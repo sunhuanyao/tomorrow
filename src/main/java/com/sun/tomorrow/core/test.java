@@ -2,6 +2,9 @@ package com.sun.tomorrow.core;
 
 import com.sun.tomorrow.core.base.Rectangle;
 import com.sun.tomorrow.core.service.ExecutorLocalService;
+import com.sun.tomorrow.core.tool.base.BaseEntity;
+import com.sun.tomorrow.core.tool.base.Heap;
+import sun.applet.Main;
 
 import java.util.Arrays;
 import java.util.List;
@@ -95,13 +98,53 @@ public class test {
 //        System.out.println(rf.queryLevel(new Point(1, 3)));
 
 
-        ExecutorLocalService executorLocalService = new ExecutorLocalService(3);
+//        ExecutorLocalService executorLocalService = new ExecutorLocalServiceLocalService(3);
+//
+//        executorLocalService.doInvoke(test.class, "task");
+        test t = new test();
+        Heap<Apple> heap = new Heap<>(9, true);
 
-        executorLocalService.doInvoke(test.class, "task");
+        heap.add(t.new Apple(1, "1"));
+        heap.add(t.new Apple(2, "2"));
+        heap.add(t.new Apple(4, "4"));
 
+        heap.add(t.new Apple(6, "6"));
+
+        heap.add(t.new Apple(7, "7"));
+
+        heap.add(t.new Apple(8, "8"));
+
+
+        heap.add(t.new Apple(3, "3"));
+        heap.add(t.new Apple(5, "5"));
+
+        System.out.println(heap.toString());
+
+        System.out.println(heap.pop().val);
+
+        System.out.println(heap.pop().val);
+
+        System.out.println(heap.pop().val);
+        System.out.println(heap.pop().val);
+
+        System.out.println(heap.pop().val);
+        System.out.println(heap.pop().val);
+
+        System.out.println(heap.pop().val);
 
     }
 
 
+    public class Apple extends BaseEntity {
+        int val;
+        String name;
+        Apple(int val, String name){
+            this.val = val;
+            this.name = name;
+        }
 
+        public int compareTo(BaseEntity tmp){
+            return this.val - ((Apple)tmp).val;
+        }
+    }
 }
