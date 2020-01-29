@@ -1,10 +1,8 @@
 package com.sun.tomorrow.core;
 
 import com.sun.tomorrow.core.base.Rectangle;
-import com.sun.tomorrow.core.service.ExecutorLocalService;
 import com.sun.tomorrow.core.tool.base.BaseEntity;
 import com.sun.tomorrow.core.tool.base.Heap;
-import sun.applet.Main;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
  * @Author roger sun
  * @Date 2019/11/7 16:21
  */
-public class test {
+public class Test {
 
     public static List<Integer> t1 = Arrays.asList(5, 2, 8,3,1,7,9, 4 , 6);
 
@@ -101,7 +99,7 @@ public class test {
 //        ExecutorLocalService executorLocalService = new ExecutorLocalServiceLocalService(3);
 //
 //        executorLocalService.doInvoke(test.class, "task");
-        test t = new test();
+        Test t = new Test();
         Heap<Apple> heap = new Heap<>(9, true);
 
         heap.add(t.new Apple(1, "1"));
