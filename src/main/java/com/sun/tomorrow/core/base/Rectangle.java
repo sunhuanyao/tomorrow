@@ -7,6 +7,33 @@ package com.sun.tomorrow.core.base;
 public class Rectangle {
     public double minX, minY, maxX, maxY;
 
+
+    private static final double DefaultXY = -1d;
+    public Rectangle(Point[] points){
+        double minX = DefaultXY;
+        double minY = DefaultXY;
+        double maxX = DefaultXY;
+        double maxY = DefaultXY;
+        for(int i = 0 ; i < points.length; ++ i){
+            if(minX == DefaultXY || minX > points[i].x){
+                minX = points[i].x;
+            }
+            if(maxX == DefaultXY || maxX < points[i].x){
+                maxX = points[i].x;
+            }
+            if(minY == DefaultXY || minY > points[i].y){
+                minY = points[i].y;
+            }
+            if(maxY == DefaultXY || maxY < points[i].y){
+                maxY = points[i].y;
+            }
+        }
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
+    }
+
     public Rectangle(double MinX, double MinY, double MaxX, double MaxY){
         this.minX = MinX;
         this.minY = MinY;

@@ -3,6 +3,7 @@ package com.sun.tomorrow.core.container;
 import com.sun.tomorrow.core.base.Point;
 import com.sun.tomorrow.core.base.RTreeNode;
 import com.sun.tomorrow.core.base.Rectangle;
+import org.w3c.dom.css.Rect;
 
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -35,6 +36,8 @@ public class RTreeFactory<T extends Rectangle> {
     //用来标记节点分割期间，entries的状态
     private final static int ENTRY_STATUS_ASSIGNED = 0;
     private final static int ENTRY_STATUS_UNASSIGNED = 1;
+
+    private Map<Rectangle, T> cache = new HashMap<>();
 
 
     private int treeHeight = 1;
@@ -72,7 +75,7 @@ public class RTreeFactory<T extends Rectangle> {
     }
 
     public void add(T r, int id) {
-
+        cache.put(new Rectangle(r.minX, r.minY, r.maxX, r.maxY), r);
         add(r.minX, r.minY, r.maxX, r.maxY, id, 1);
 
         size++;
@@ -452,7 +455,7 @@ public class RTreeFactory<T extends Rectangle> {
         entryStatus[next] = ENTRY_STATUS_ASSIGNED;
 
         if(nextGroup == 0){
-            if (n.entriesMaxX[next] < n.mbrMinX) n.mbrMinX = n.entriesMinX[next];
+            if (n.entriesMinX[next] < n.mbrMinX) n.mbrMinX = n.entriesMinX[next];
             if (n.entriesMinY[next] < n.mbrMinY) n.mbrMinY = n.entriesMinY[next];
             if (n.entriesMaxX[next] > n.mbrMaxX) n.mbrMaxX = n.entriesMaxX[next];
             if (n.entriesMaxY[next] > n.mbrMaxY) n.mbrMaxY = n.entriesMaxY[next];
@@ -515,7 +518,6 @@ public class RTreeFactory<T extends Rectangle> {
         return result;
     }
      // --待解决方案 ----
-    @SuppressWarnings("unchecked")
     public List<T> queryLevel(Point p){
 
         List<RTreeNode> result = queryRelation(p, 1);
@@ -525,7 +527,7 @@ public class RTreeFactory<T extends Rectangle> {
             for(int i = 0; i < rn.entryCount; i++) {
                 if (containsPoint(rn.entriesMaxX[i], rn.entriesMaxY[i], rn.entriesMinX[i], rn.entriesMinY[i], p)) {
 //                    return new Leaf(rn.entriesMinX[i], rn.entriesMinY[i], rn.entriesMaxX[i], rn.entriesMaxY[i]);
-                    resLeaf.add((T)new Rectangle(rn.entriesMinX[i], rn.entriesMinY[i], rn.entriesMaxX[i], rn.entriesMaxY[i]));
+                    resLeaf.add(cache.get(new Rectangle(rn.entriesMinX[i], rn.entriesMinY[i], rn.entriesMaxX[i], rn.entriesMaxY[i])));
 
                 }
             }
