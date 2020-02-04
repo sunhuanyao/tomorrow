@@ -1,21 +1,20 @@
 package com.sun.tomorrow.core.tool.parseCore;
 
-import com.sun.istack.internal.Nullable;
-import com.sun.org.apache.xml.internal.resolver.readers.ExtendedXMLCatalogReader;
 import com.sun.tomorrow.core.base.Point;
 import com.sun.tomorrow.core.domain.RegionInfo;
 import com.sun.tomorrow.core.domain.TRsource;
+import com.sun.tomorrow.core.util.exception.ResourceNotFoundException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import sun.jvm.hotspot.ui.DeadlockDetectionPanel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,14 +28,13 @@ public class DefaultXmlReader implements TReader {
     private static final String FIELD_NAME = "name";
     private static final String FIELD_RINGS = "rings";
 
+
+
     private TRsource resource;
 
-    private final Class<?> clazz;
 
-
-    public DefaultXmlReader(TRsource resource, Class<?> clazz) {
+    public DefaultXmlReader(TRsource resource) {
         this.resource = resource;
-        this.clazz = clazz;
     }
 
     /**
@@ -64,10 +62,10 @@ public class DefaultXmlReader implements TReader {
             return regionInfos;
         }catch (Exception e){
             //调试用
-            e.printStackTrace();
-            System.out.println("false:" + e.getMessage());
+//            e.printStackTrace();
+//            System.out.println("false:" + e.getMessage());
+            throw new ResourceNotFoundException(e.getMessage());
         }
-        return null;
     }
 
     /**
@@ -89,8 +87,13 @@ public class DefaultXmlReader implements TReader {
      * @return            返回文件路径
      */
     private String getSource(){
-        URL url = this.clazz.getClassLoader().getResource(this.resource.getPath());
-        return url.getPath();
+        String nowDir = System.getProperty("user.dir");
+
+//        URL url = this.classLoader.getResource(this.resource.getPath());
+//        if(url == null) throw new ResourceNotFoundException(this.resource.getPath());
+//        return url.getPath();
+
+        return nowDir + TReader.MIDDIR + this.resource.getPath();
     }
 
     /**
@@ -116,7 +119,7 @@ public class DefaultXmlReader implements TReader {
     }
 
     public static void main(String[] args){
-        TReader tReader = new DefaultXmlReader(new TRsource("test.xml"), RegionInfo.class);
+        TReader tReader = new DefaultXmlReader(new TRsource("test.xml"));
         tReader.parseResource();
 
 //        String str = "123.123-13";

@@ -1,6 +1,6 @@
 package com.sun.tomorrow.core.tool.parseCore;
 
-import com.sun.istack.internal.Nullable;
+
 import com.sun.tomorrow.core.domain.RegionInfo;
 import com.sun.tomorrow.core.domain.TRsource;
 
@@ -10,6 +10,8 @@ import java.util.List;
 public interface TReader {
 
     public static final String xmlReader = "xml";
+
+    public static final String MIDDIR = "/src/main/resources/";
 
 
     /**
