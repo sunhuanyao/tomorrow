@@ -23,12 +23,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 public class DefaultXmlReader implements TReader {
-
+    /**
+     * xml的有固定的模版样式，可重写该类来进行解析。
+     */
     private static final String FIELD_PIECEAREA = "Piecearea";
     private static final String FIELD_NAME = "name";
     private static final String FIELD_RINGS = "rings";
-
-
 
     private TRsource resource;
 
@@ -79,14 +79,14 @@ public class DefaultXmlReader implements TReader {
             IOException, org.xml.sax.SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(new FileInputStream(getSource()));
+        return builder.parse(new FileInputStream(getRelativePath()));
     }
 
     /**
-     * 获取 文件路径
+     * 获取相对地址文件路径，意在能够根据用户自定义路径进行配置，但必须在resources路径下的位置。
      * @return            返回文件路径
      */
-    private String getSource(){
+    private String getRelativePath(){
         String nowDir = System.getProperty("user.dir");
 
 //        URL url = this.classLoader.getResource(this.resource.getPath());
@@ -94,6 +94,10 @@ public class DefaultXmlReader implements TReader {
 //        return url.getPath();
 
         return nowDir + TReader.MIDDIR + this.resource.getPath();
+    }
+
+    private String getDefaultPath(){
+        return null;
     }
 
     /**

@@ -11,48 +11,38 @@ import com.sun.tomorrow.core.util.PolygonUtil;
 import java.util.*;
 
 public class ApplicationRegionFactory implements RegionFactory{
-
-    private static final String DEFAULT_TYPE = "xml";
-
+    /**
+     * 数据源文件的读取类。该类有不同的读取方式。根据type决定。
+     */
     private TReader tReader;
-    //xml or other
-    private final String type;
-
-    //地图信息文件-----
+    /**
+     * 地图信息文件名 : 默认放在当前项目的resources下面 才能正确识别
+     */
     private String sourceName;
 
+    /**
+     * 区域信息空间索引工厂类
+     */
     private RTreeFactory<RegionInfo> regionInfoRTreeFactory;
 
-
-    private ClassLoader classLoader;
-
     public ApplicationRegionFactory(String sourceName){
-        this(DEFAULT_TYPE, sourceName);
+        this(new DefaultXmlReader(new TRsource(sourceName)), sourceName);
     }
 
+    public ApplicationRegionFactory(TReader tReader, String sourceName){
 
-    public ApplicationRegionFactory(String type, String sourceName){
-        if(type == null) {
-            this.type = DEFAULT_TYPE;
-        }else{
-            this.type = type;
-        }
         this.sourceName = sourceName;
-//        if(loader != null){
-//            this.classLoader = loader;
-//        }else{
-//            this.classLoader = Thread.currentThread().getContextClassLoader();
-//        }
-        switch (this.type){
-            case TReader.xmlReader:
-                this.tReader = new DefaultXmlReader(new TRsource(this.sourceName));
-                break;
-            default:
-                break;
-        }
+
+        this.tReader = tReader;
+
         solve();
     }
 
+    /**
+     * 1.读取数据源;
+     * 2.预初始化数据区域空间索引工厂类；
+     * 3.初始化区域信息。
+     */
     public void solve(){
 
         List<RegionInfo> regionInfos = this.tReader.parseResource();
@@ -68,6 +58,11 @@ public class ApplicationRegionFactory implements RegionFactory{
 
     }
 
+    /**
+     * 通过经纬度点得到对应的区域信息，并返回。
+     * @param point    给定的经纬度点
+     * @return         对应的区域信息
+     */
     public List<RegionInfo> getRegionInfo(Point point){
         List<RegionInfo> regionInfos = this.regionInfoRTreeFactory.queryLevel(point);
 
@@ -81,6 +76,10 @@ public class ApplicationRegionFactory implements RegionFactory{
 
     }
 
+    /**
+     * 测试入口
+     * @param args --
+     */
     public static void main(String[] args){
         ApplicationRegionFactory applicationRegionFactory = new ApplicationRegionFactory("tomorrow_region.xml");
         List<RegionInfo> regionInfos = applicationRegionFactory.getRegionInfo(new Point(116.318319,40.603389));
