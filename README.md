@@ -1,8 +1,5 @@
-# tomorrow
-a local cache for indexes named tomorrow；
-
 该项目致力于本地索引缓存的快速实现，方便解决资源瓶颈上的问题。
-
+--
 avl树的用法示例
 ```$xslt
 public class test {
@@ -49,7 +46,7 @@ System.out.println(bTreeFactory);
 
 用法如下：
 
-```$xslt
+```
 
 public class test {
     public void task1(){
@@ -69,9 +66,9 @@ public class test {
     }
 ```
 
-#堆用法-定长堆
+# 堆用法-定长堆
 
-```aidl
+```
 public class Apple extends BaseEntity {
     int val;
     String name;
@@ -86,6 +83,7 @@ public class Apple extends BaseEntity {
 }
 
 Heap<Apple> heap = new Heap<>(9, true);
+//添加节点
 heap.add(t.new Apple(1, "1"));
 heap.add(t.new Apple(2, "2"));
 heap.add(t.new Apple(4, "4"));
@@ -99,10 +97,15 @@ System.out.println(heap.pop().val);
 System.out.println(heap.pop().val);
 ```
 
+# 经纬度解析，该方法是对R树的封装运用。
 
+用法如下：
 
-经纬度解析
-
-```aidl
+```
+ApplicationRegionFactory applicationRegionFactory = new ApplicationRegionFactory("tomorrow_region.xml");
+List<RegionInfo> regionInfos = applicationRegionFactory.getRegionInfo(new Point(116.318319,40.603389));
+for(RegionInfo regionInfo: regionInfos){
+    System.out.println(regionInfo.getName());
+}
 
 ```
