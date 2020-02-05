@@ -4,6 +4,7 @@ import com.sun.tomorrow.core.base.Point;
 import com.sun.tomorrow.core.domain.RegionInfo;
 import com.sun.tomorrow.core.domain.TRsource;
 import com.sun.tomorrow.core.util.exception.ResourceNotFoundException;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,15 +13,15 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
+import org.springframework.core.io.UrlResource;
 
 public class DefaultXmlReader implements TReader {
     /**
@@ -79,7 +80,11 @@ public class DefaultXmlReader implements TReader {
             IOException, org.xml.sax.SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
+        if(this.resource == null){
+            return builder.parse(getDefaultPath());
+        }
         return builder.parse(new FileInputStream(getRelativePath()));
+
     }
 
     /**
@@ -88,16 +93,19 @@ public class DefaultXmlReader implements TReader {
      */
     private String getRelativePath(){
         String nowDir = System.getProperty("user.dir");
-
-//        URL url = this.classLoader.getResource(this.resource.getPath());
-//        if(url == null) throw new ResourceNotFoundException(this.resource.getPath());
-//        return url.getPath();
-
         return nowDir + TReader.MIDDIR + this.resource.getPath();
     }
 
-    private String getDefaultPath(){
-        return null;
+    private InputStream getDefaultPath(){
+        try {
+            URL url = DefaultXmlReader.class.getClassLoader().getResource(DEFAULT_REGION_XML);
+            UrlResource urlResource = new UrlResource(url);
+            return urlResource.getInputStream();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ResourceNotFoundException("error to read Resource!");
+        }
+
     }
 
     /**
@@ -123,9 +131,11 @@ public class DefaultXmlReader implements TReader {
     }
 
     public static void main(String[] args){
-        TReader tReader = new DefaultXmlReader(new TRsource("test.xml"));
-        tReader.parseResource();
+//        TReader tReader = new DefaultXmlReader(new TRsource("test.xml"));
+        DefaultXmlReader defaultXmlReader = new DefaultXmlReader(new TRsource(null));
 
+//        defaultXmlReader.getDefaultPath();
+        defaultXmlReader.parseResource();
 //        String str = "123.123-13";
 //
 //        String[] sts = str.split("\\.|-");

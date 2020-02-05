@@ -25,6 +25,10 @@ public class ApplicationRegionFactory implements RegionFactory{
      */
     private RTreeFactory<RegionInfo> regionInfoRTreeFactory;
 
+    public ApplicationRegionFactory(){
+        this(new DefaultXmlReader(null), null);
+    }
+
     public ApplicationRegionFactory(String sourceName){
         this(new DefaultXmlReader(new TRsource(sourceName)), sourceName);
     }
