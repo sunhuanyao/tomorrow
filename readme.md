@@ -1,6 +1,7 @@
 该项目致力于本地索引缓存的快速实现，方便解决资源瓶颈上的问题。
 --
-avl树的用法示例
+
+# avl树的用法示例
 ```$xslt
 public class test {
    public static List<Integer> t1 = Arrays.asList(5, 2, 8, 3, 1, 7, 9, 4, 6);
@@ -22,7 +23,7 @@ public class test {
 }
 ```
 
-B数的用法示例
+# B树的用法示例
 ```$xslt
 BTreeFactory<Integer> bTreeFactory = new BTreeFactory<Integer>(3) {
     @Override
@@ -38,11 +39,14 @@ for(int i = 0 ; i < a.length; ++ i){
 System.out.println(bTreeFactory);
 ```
 
-# R树空间索引的实现
+# 基于B+树的空间索引实现
 
-1.该R树主要针对点在二维矩形群中的一个快速查找。
+该R树主要针对点在二维矩形群中的一个快速查找。具体用法已被封装成ApplicationRegionFactory
+类。
 
 # 线程
+
+该工具面向需求：并发运行内部函数。
 
 用法如下：
 
@@ -67,6 +71,8 @@ public class test {
 ```
 
 # 堆用法-定长堆
+
+步骤描述：实现BaseEntity的子类即可。然后调用Heap。样例如下：
 
 ```
 public class Apple extends BaseEntity {
@@ -97,10 +103,11 @@ System.out.println(heap.pop().val);
 System.out.println(heap.pop().val);
 ```
 
-# 经纬度解析，该方法是对R树的封装运用。
+# 空间索引工厂类
+
+需求描述：给定经纬度点，找到相应的地理位置。
 
 用法如下：
-
 ```
 ApplicationRegionFactory applicationRegionFactory = new ApplicationRegionFactory("tomorrow_region.xml");
 List<RegionInfo> regionInfos = applicationRegionFactory.getRegionInfo(new Point(116.318319,40.603389));
