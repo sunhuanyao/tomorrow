@@ -106,6 +106,9 @@ System.out.println(heap.pop().val);
 # 空间索引工厂类
 
 需求描述：给定经纬度点，找到相应的地理位置。
+该方法有对应的Springboot的Starter用法。
+详见：https://github.com/sunhuanyao/tomorrow-core-starter，
+可快速实现于springboot项目。内部有默认的经纬度全国信息。
 
 用法如下：
 ```
