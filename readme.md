@@ -1,7 +1,7 @@
-该项目致力于本地索引缓存的快速实现，方便解决资源瓶颈上的问题。
+# 该项目致力于本地索引缓存的快速实现，方便解决资源瓶颈上的问题。
 --
 
-# avl树的用法示例
+## avl树的用法示例
 ```$xslt
 public class test {
    public static List<Integer> t1 = Arrays.asList(5, 2, 8, 3, 1, 7, 9, 4, 6);
@@ -23,7 +23,7 @@ public class test {
 }
 ```
 
-# B树的用法示例
+## B树的用法示例
 ```$xslt
 BTreeFactory<Integer> bTreeFactory = new BTreeFactory<Integer>(3) {
     @Override
@@ -39,12 +39,12 @@ for(int i = 0 ; i < a.length; ++ i){
 System.out.println(bTreeFactory);
 ```
 
-# 基于B+树的空间索引实现
+## 基于B+树的空间索引实现
 
 该R树主要针对点在二维矩形群中的一个快速查找。具体用法已被封装成ApplicationRegionFactory
 类。
 
-# 线程
+## 线程
 
 该工具面向需求：并发运行内部函数。
 
@@ -70,7 +70,7 @@ public class test {
     }
 ```
 
-# 堆用法-定长堆
+## 堆用法-定长堆
 
 步骤描述：实现BaseEntity的子类即可。然后调用Heap。样例如下：
 
@@ -103,7 +103,7 @@ System.out.println(heap.pop().val);
 System.out.println(heap.pop().val);
 ```
 
-# 空间索引工厂类
+## 空间索引工厂类
 
 需求描述：给定经纬度点，找到相应的地理位置。
 该方法有对应的Springboot的Starter用法。
@@ -117,5 +117,4 @@ List<RegionInfo> regionInfos = applicationRegionFactory.getRegionInfo(new Point(
 for(RegionInfo regionInfo: regionInfos){
     System.out.println(regionInfo.getName());
 }
-
 ```
