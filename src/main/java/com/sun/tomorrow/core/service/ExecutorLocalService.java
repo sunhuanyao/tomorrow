@@ -1,5 +1,8 @@
 package com.sun.tomorrow.core.service;
 
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,9 @@ import java.util.concurrent.Executors;
 public class ExecutorLocalService {
 
     private final ExecutorService executorService;
+    /**
+     *  运行的类
+     */
 
     public ExecutorLocalService(int num){
         this.executorService = Executors.newFixedThreadPool(num);
@@ -30,14 +36,15 @@ public class ExecutorLocalService {
      *  调用主入口
      * @param clazz 调用的类
      * @param args  调用的方法
+     * @param conArgs 构造函数参数
      */
-    public void doInvoke(Class<?> clazz, String args){
+    public <T> void doInvoke(Class<?> clazz, String methodName, Class<?> parameterType, T ... conArgs){
         Method[] methods = clazz.getDeclaredMethods();
 
         List<Method> methodList = new ArrayList<>();
 
         for(Method method:methods){
-            if(islegal(method.getName(), args)){
+            if(islegal(method.getName(), methodName)){
                 methodList.add(method);
             }
         }
@@ -46,8 +53,8 @@ public class ExecutorLocalService {
 
 //        final Object single;
         try {
-            final Object single = clazz.newInstance();
-
+//            final Object single = clazz.newInstance();
+            final Object single = createInstance(clazz, parameterType, conArgs);
             for( i = 0 ; i < runnables.length; ++ i){
                 final int op = i;
                 runnables[i] = ()->{
@@ -61,10 +68,22 @@ public class ExecutorLocalService {
                 };
             }
         }catch (Exception e){
-
+            e.printStackTrace();
         }
         this.exec(runnables);
 
+    }
+
+    public <T> Object createInstance(Class<?> clazz, Class<?> parameterType, T ... args){
+        try {
+            if(args == null || args.length == 0) return clazz.newInstance();
+            Constructor<?> constructor = clazz.getConstructor(parameterType);
+            return constructor.newInstance(args);
+
+        }catch ( Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean islegal(String main, String args){
