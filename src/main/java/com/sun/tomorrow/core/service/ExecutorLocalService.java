@@ -43,17 +43,25 @@ public class ExecutorLocalService {
         }
         Runnable[] runnables = new Runnable[methodList.size()];
         int i;
-        for( i = 0 ; i < runnables.length; ++ i){
-            final int op = i;
-            runnables[i] = ()->{
-                try {
-//                        System.out.println("doInvoke!!!!");
-                    //invoke 调用 传参数必须是实例化变量
-                    methodList.get(op).invoke(clazz.newInstance());
-                }catch (Exception e){
 
-                }
-            };
+//        final Object single;
+        try {
+            final Object single = clazz.newInstance();
+
+            for( i = 0 ; i < runnables.length; ++ i){
+                final int op = i;
+                runnables[i] = ()->{
+                    try {
+    //                        System.out.println("doInvoke!!!!");
+                        //invoke 调用 传参数必须是实例化变量
+                        methodList.get(op).invoke(single);
+                    }catch (Exception e){
+
+                    }
+                };
+            }
+        }catch (Exception e){
+
         }
         this.exec(runnables);
 
