@@ -1,10 +1,12 @@
 package com.sun.tomorrow.core.base;
 
+import java.io.Serializable;
+
 /**
  * @Author roger sun
  * @Date 2019/12/15 20:30
  */
-public class Point {
+public class Point implements Serializable {
 
     public double x, y;
 
