@@ -1,0 +1,2 @@
+@com.sun.tomorrow.core.service.RegionFactory=
+com.sun.tomorrow.core.service.ApplicationRegionFactory

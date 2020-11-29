@@ -7,14 +7,14 @@ import com.sun.tomorrow.core.domain.TRsource;
 import java.util.List;
 
 
-public interface TReader {
+public interface TReader<T> {
     public static final String MIDDIR = "/src/main/resources/";
 
-    public static final String DEFAULT_REGION_XML = "tomorrow_region.xml";
+
     /**
      * 获取 区域信息
      * @return 返回读取后区域列表
      */
-    public List<RegionInfo> parseResource();
+    public T parseResource();
 
 }

@@ -4,7 +4,7 @@ import com.sun.tomorrow.core.base.Point;
 import com.sun.tomorrow.core.container.RTreeFactory;
 import com.sun.tomorrow.core.domain.RegionInfo;
 import com.sun.tomorrow.core.domain.TRsource;
-import com.sun.tomorrow.core.tool.parseCore.DefaultXmlReader;
+import com.sun.tomorrow.core.tool.parseCore.DefaultXmlRegionReader;
 import com.sun.tomorrow.core.tool.parseCore.TReader;
 import com.sun.tomorrow.core.util.PolygonUtil;
 
@@ -14,11 +14,10 @@ public class ApplicationRegionFactory implements RegionFactory{
     /**
      * 数据源文件的读取类。该类有不同的读取方式。根据type决定。
      */
-    private TReader tReader;
+    private TReader<List<RegionInfo>> tReader;
     /**
      * 地图信息文件名 : 默认放在当前项目的resources下面 才能正确识别
      */
-    private String sourceName;
 
     /**
      * 区域信息空间索引工厂类
@@ -26,16 +25,14 @@ public class ApplicationRegionFactory implements RegionFactory{
     private RTreeFactory<RegionInfo> regionInfoRTreeFactory;
 
     public ApplicationRegionFactory(){
-        this(new DefaultXmlReader(null), null);
+        this(new DefaultXmlRegionReader(null), null);
     }
 
     public ApplicationRegionFactory(String sourceName){
-        this(new DefaultXmlReader(new TRsource(sourceName)), sourceName);
+        this(new DefaultXmlRegionReader(new TRsource(sourceName)), sourceName);
     }
 
-    public ApplicationRegionFactory(TReader tReader, String sourceName){
-
-        this.sourceName = sourceName;
+    public ApplicationRegionFactory(TReader<List<RegionInfo>> tReader, String sourceName){
 
         this.tReader = tReader;
 

@@ -3,11 +3,10 @@ package com.sun.tomorrow.core.tool.parseCore;
 import com.sun.tomorrow.core.base.Point;
 import com.sun.tomorrow.core.domain.RegionInfo;
 import com.sun.tomorrow.core.domain.TRsource;
+import com.sun.tomorrow.core.util.PathUtil;
 import com.sun.tomorrow.core.util.exception.ResourceNotFoundException;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,13 +16,10 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.logging.Logger;
+
 import org.springframework.core.io.UrlResource;
 
-public class DefaultXmlReader implements TReader {
+public class DefaultXmlRegionReader extends AbstractXmlReader {
     /**
      * xml的有固定的模版样式，可重写该类来进行解析。
      */
@@ -31,11 +27,11 @@ public class DefaultXmlReader implements TReader {
     private static final String FIELD_NAME = "name";
     private static final String FIELD_RINGS = "rings";
 
-    private TRsource resource;
 
 
-    public DefaultXmlReader(TRsource resource) {
-        this.resource = resource;
+
+    public DefaultXmlRegionReader(TRsource resource) {
+        super(resource);
     }
 
     /**
@@ -69,44 +65,7 @@ public class DefaultXmlReader implements TReader {
         }
     }
 
-    /**
-     *   获取Document, 相当于文件信息
-     * @return
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws org.xml.sax.SAXException
-     */
-    private Document getDocument() throws ParserConfigurationException,
-            IOException, org.xml.sax.SAXException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        if(this.resource == null){
-            return builder.parse(getDefaultPath());
-        }
-        return builder.parse(new FileInputStream(getRelativePath()));
 
-    }
-
-    /**
-     * 获取相对地址文件路径，意在能够根据用户自定义路径进行配置，但必须在resources路径下的位置。
-     * @return            返回文件路径
-     */
-    private String getRelativePath(){
-        String nowDir = System.getProperty("user.dir");
-        return nowDir + TReader.MIDDIR + this.resource.getPath();
-    }
-
-    private InputStream getDefaultPath(){
-        try {
-            URL url = DefaultXmlReader.class.getClassLoader().getResource(DEFAULT_REGION_XML);
-            UrlResource urlResource = new UrlResource(url);
-            return urlResource.getInputStream();
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new ResourceNotFoundException("error to read Resource!");
-        }
-
-    }
 
     /**
      * 解析经纬度点集
@@ -132,10 +91,10 @@ public class DefaultXmlReader implements TReader {
 
     public static void main(String[] args){
 //        TReader tReader = new DefaultXmlReader(new TRsource("test.xml"));
-        DefaultXmlReader defaultXmlReader = new DefaultXmlReader(new TRsource(null));
+        DefaultXmlRegionReader defaultXmlRegionReader = new DefaultXmlRegionReader(new TRsource(null));
 
 //        defaultXmlReader.getDefaultPath();
-        defaultXmlReader.parseResource();
+        defaultXmlRegionReader.parseResource();
 //        String str = "123.123-13";
 //
 //        String[] sts = str.split("\\.|-");

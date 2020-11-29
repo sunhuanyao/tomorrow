@@ -35,7 +35,8 @@ public class ExecutorLocalService {
     /**
      *  调用主入口
      * @param clazz 调用的类
-     * @param args  调用的方法
+     * @param methodName  运行的方法
+     * @param parameterType 构造带参的类型--指定是哪个构造函数。
      * @param conArgs 构造函数参数
      */
     public <T> void doInvoke(Class<?> clazz, String methodName, Class<?> parameterType, T ... conArgs){
@@ -53,14 +54,14 @@ public class ExecutorLocalService {
 
 //        final Object single;
         try {
-//            final Object single = clazz.newInstance();
+            //final Object single = clazz.newInstance();
             final Object single = createInstance(clazz, parameterType, conArgs);
             for( i = 0 ; i < runnables.length; ++ i){
                 final int op = i;
                 runnables[i] = ()->{
                     try {
-    //                        System.out.println("doInvoke!!!!");
-                        //invoke 调用 传参数必须是实例化变量
+    //System.out.println("doInvoke!!!!");
+    //invoke 调用 传参数必须是实例化变量
                         methodList.get(op).invoke(single);
                     }catch (Exception e){
 
