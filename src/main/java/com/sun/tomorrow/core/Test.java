@@ -1,12 +1,25 @@
 package com.sun.tomorrow.core;
 
 import com.sun.tomorrow.core.base.Rectangle;
+import com.sun.tomorrow.core.lock.zookeeper.ZkLock;
+import com.sun.tomorrow.core.lock.zookeeper.ZkLockBlocklessImpl;
+import com.sun.tomorrow.core.lock.zookeeper.ZookeeperClient;
 import com.sun.tomorrow.core.service.ExecutorLocalService;
 import com.sun.tomorrow.core.tool.base.BaseEntity;
 import com.sun.tomorrow.core.tool.base.Heap;
+import org.apache.curator.RetryPolicy;
+import org.apache.curator.RetrySleeper;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.imps.CuratorFrameworkImpl;
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.ZooKeeper;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -69,12 +82,57 @@ public class Test {
     }
 
 
-    public static void main(String[] args) {
+    static int op = 1;
+    public static void main(String[] args) throws Exception {
 
 
-        ExecutorLocalService executorLocalService = new ExecutorLocalService(2);
+//        ExecutorLocalService executorLocalService = new ExecutorLocalService(2);
+//
+//        executorLocalService.doInvoke(Test.class, "task", int.class, 4);
 
-        executorLocalService.doInvoke(Test.class, "task", int.class, 4);
+//        ZkLock zkLock = new ZkLockBlocklessImpl(ZookeeperClient.getInstance().getClient());
+        String lockname = "/lock1";
+//
+        RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
+        Executor executor = new ThreadPoolExecutor(10,
+                20, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(100));
+        CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient("127.0.0.1:2181", retryPolicy);
+        curatorFramework.start();
+        InterProcessMutex lock = new InterProcessMutex(curatorFramework, lockname);
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        for(int i = 0; i < 100; ++ i) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            System.out.println("start.");
+                            if(lock.acquire(1, TimeUnit.SECONDS)){
+                                System.out.println(op++);
+                                lock.release();
+                                break;
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            if(lock.isAcquiredInThisProcess()) {
+                                try {
+                                    lock.release();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                    }
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+        System.out.println(op);
+
     }
 
 }
