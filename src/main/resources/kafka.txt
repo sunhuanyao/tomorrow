@@ -1,0 +1,20 @@
+{
+    "producer": {
+        "bootstrap.servers": "localhost:9092",
+        "key.serializer": "org.apache.kafka.common.serialization.StringSerializer",
+        "value.serializer": "org.apache.kafka.common.serialization.StringSerializer",
+        "max.request.size": "10485760",
+        "batch.size": "163840",
+        "buffer.memory": "536870912",
+        "max.block.ms": "500",
+        "retries": "3",
+        "acks": "1",
+    },
+    "cosumer": {
+        "bootstrap.servers": "localhost:9092",
+        "group.id": "test",
+        "session.timeout.ms": "30000",
+        "key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+        "value.deserializer": "org.apache.kafka.common.serialization.StringDeserializer"
+    }
+}
