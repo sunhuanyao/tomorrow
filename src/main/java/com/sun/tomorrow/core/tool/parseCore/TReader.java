@@ -11,7 +11,7 @@ public interface TReader<T> {
     public static final String MIDDIR = "/src/main/resources/";
 
 
-    /**
+    /**x
      * 获取 区域信息
      * @return 返回读取后区域列表
      */

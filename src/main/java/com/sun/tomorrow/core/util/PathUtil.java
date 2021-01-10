@@ -1,10 +1,7 @@
 package com.sun.tomorrow.core.util;
 
-import com.sun.tomorrow.core.tool.parseCore.DefaultXmlRegionReader;
-import com.sun.tomorrow.core.tool.parseCore.TReader;
 import com.sun.tomorrow.core.util.exception.ResourceNotFoundException;
 import org.springframework.core.io.UrlResource;
-import sun.jvm.hotspot.debugger.ThreadContext;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -22,7 +19,12 @@ public class PathUtil {
         return nowDir + path;
     }
 
-
+    /**
+     * 获取相对路径resources
+     *
+     * @param path luji
+     * @return
+     */
     public static String getRelativePathUnderResource(String path){
         String nowDir = System.getProperty("user.dir");
         return nowDir + MIDDER_RESOURCE + path;
