@@ -10,7 +10,7 @@
         "retries": "3",
         "acks": "1",
     },
-    "cosumer": {
+    "consumer": {
         "bootstrap.servers": "localhost:9092",
         "group.id": "test",
         "session.timeout.ms": "30000",

@@ -13,9 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Properties;
+import java.time.Duration;
+import java.util.*;
 
 public class KafkaInstance {
 
@@ -48,7 +47,7 @@ public class KafkaInstance {
     private Properties getConfig(Type type) {
         Properties properties = new Properties();
         Map<String, Object> res;
-        try(InputStream reader = KafkaInstance.class.getResourceAsStream(KAFKAPATH)) {
+        try(InputStream reader = KafkaInstance.class.getClassLoader().getResourceAsStream(KAFKAPATH)) {
            res = JSONObject.parseObject(reader, new TypeReference<Map<String, Object>>() {
             }.getType());
         }catch (IOException e){
@@ -58,9 +57,11 @@ public class KafkaInstance {
         switch (type) {
             case PRODUCE:
                 info = res.get(Type.PRODUCE.info);
+                LOG.info("producer: {}", info);
                 break;
             case CONSUMER:
                 info = res.get(Type.CONSUMER.info);
+                LOG.info("consumer: {}", info);
                 break;
             default:
                 LOG.error("not support type");
@@ -75,5 +76,9 @@ public class KafkaInstance {
         return properties;
     }
 
-
+    public static void main(String[] args) {
+        KafkaConsumer<String, String> consumer = new KafkaInstance().getConsumerClient();
+        consumer.subscribe(Collections.singletonList("test"));
+        consumer.poll(Duration.ofMillis(1000));
+    }
 }

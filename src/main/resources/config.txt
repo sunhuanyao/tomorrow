@@ -1,0 +1,9 @@
+{
+    "redis": {
+        "host":"127.0.0.1",
+        "port":6379,
+        "maxIdle":100,
+        "maxWaitTime":3000,
+        "timeout":100
+    }
+}
