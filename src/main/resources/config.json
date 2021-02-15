@@ -5,5 +5,10 @@
         "maxIdle":100,
         "maxWaitTime":3000,
         "timeout":100
+    },
+    "elasticsearch": {
+        "host": "127.0.0.1",
+        "port": 9200,
+        "ssl": "http"
     }
 }
