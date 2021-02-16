@@ -2,7 +2,6 @@ package com.sun.tomorrow.core.tool.kafka;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.sun.tomorrow.core.util.ResourceUtil;
 import com.sun.tomorrow.core.util.exception.BusinessException;
 import lombok.Getter;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -10,7 +9,6 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;

@@ -46,4 +46,21 @@ public class RedisInstance {
         private int timeout;
 
     }
+
+    public static void main(String[] args) {
+        Jedis jedis = RedisInstance.getInstance().jedisPool.getResource();
+////        jedis.lpush("test", "1", "2");
+////        Object ok = ok
+//        System.out.println(jedis.lrange("test", 0, -1));
+//        jedis.set("test_int", "1");
+//        jedis.incr("test_int");
+//        System.out.println(jedis.exists("test_int"));
+//        System.out.println(jedis.get("test_int"));
+
+//        List<String> arr = new ArrayList<>();
+//        arr.add("1");
+//        arr.add("2");
+//        jedis.lpush("key_test", arr.toArray(new String[]{}));
+        System.out.println(jedis.exists("key_test"));
+    }
 }
